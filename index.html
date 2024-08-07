@@ -67,6 +67,57 @@
                 </div>
             </div>
         </section>
+        <section id="safety-hub" class="mb-20 bg-red-100 p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-semibold mb-6 text-red-700">Safety Hub</h2>
+            <p class="mb-6 text-lg">Your safety is our top priority. Access these features quickly in times of need:</p>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <button onclick="makeSOSCall()" class="bg-red-500 text-white p-4 rounded-lg shadow hover:bg-red-600 transition">
+                    <i class="fas fa-exclamation-triangle text-3xl mb-2"></i>
+                    <span class="block">SOS Call</span>
+                </button>
+                <button onclick="sendSOSMessage()" class="bg-red-500 text-white p-4 rounded-lg shadow hover:bg-red-600 transition">
+                    <i class="fas fa-mobile-alt text-3xl mb-2"></i>
+                    <span class="block">SOS Message</span>
+                </button>
+                <button onclick="activateShakeAlert()" class="bg-red-500 text-white p-4 rounded-lg shadow hover:bg-red-600 transition">
+                    <i class="fas fa-hand-paper text-3xl mb-2"></i>
+                    <span class="block">Shake Alert</span>
+                </button>
+                <button onclick="emergencyCamera()" class="bg-red-500 text-white p-4 rounded-lg shadow hover:bg-red-600 transition">
+                    <i class="fas fa-camera text-3xl mb-2"></i>
+                    <span class="block">Emergency Camera</span>
+                </button>
+                <button onclick="findNearbyPoliceStations()" class="bg-red-500 text-white p-4 rounded-lg shadow hover:bg-red-600 transition">
+                    <i class="fas fa-map-marker-alt text-3xl mb-2"></i>
+                    <span class="block">Nearby Police Stations</span>
+                </button>
+                <button onclick="playPoliceSiren()" class="bg-red-500 text-white p-4 rounded-lg shadow hover:bg-red-600 transition">
+                    <i class="fas fa-volume-up text-3xl mb-2"></i>
+                    <span class="block">Police Siren</span>
+                </button>
+                <button onclick="callQuickTaxi()" class="bg-red-500 text-white p-4 rounded-lg shadow hover:bg-red-600 transition">
+                    <i class="fas fa-taxi text-3xl mb-2"></i>
+                    <span class="block">Quick Taxi</span>
+                </button>
+                <button onclick="showSafetyNews()" class="bg-red-500 text-white p-4 rounded-lg shadow hover:bg-red-600 transition">
+                    <i class="fas fa-newspaper text-3xl mb-2"></i>
+                    <span class="block">Safety News & Tips</span>
+                </button>
+            </div>
+        </section>
+        
+
+        
+        <!-- Map Modal -->
+        <div id="mapModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+            <div class="bg-white p-4 rounded-lg shadow-lg relative w-full max-w-3xl">
+                <button onclick="closeMap()" class="absolute top-2 right-2 text-red-600">&times;</button>
+                <div id="map" class="w-full h-96 rounded"></div>
+            </div>
+        </div>
+        
+        
+        
 
         <section id="resources" class="mb-20">
             <h2 class="text-3xl font-semibold mb-6">Empowering Resources</h2>
@@ -94,6 +145,20 @@
             </div>
         </section>
 
+        <section id="safety-tips" class="mb-20">
+            <h2 class="text-3xl font-semibold mb-6">Stay Safe: Self-Defense Tips</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <ul class="space-y-4">
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Always be aware of your surroundings</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Trust your instincts - if something feels off, it probably is</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Keep your phone charged and easily accessible</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Learn basic self-defense moves</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Share your location with trusted contacts when traveling</li>
+                </ul>
+                <a href="#" class="text-rose-600 hover:underline mt-4 inline-block">Read More Safety Tips</a>
+            </div>
+        </section>
+   
         <section id="blog" class="mb-20">
             <h2 class="text-3xl font-semibold mb-6">SupportHers™ Blog</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -207,5 +272,147 @@
             window.location.href = 'https://www.weather.com/';
         });
     </script>
+    <script>
+        function makeSOSCall() {
+            window.location.href = 'tel:999'; // Example for emergency number
+        }
+    
+        function sendSOSMessage() {
+            const phoneNumber = '1234567890'; // Example number
+            const message = 'SOS! I need help. My location is: https://maps.google.com/?q=lat,long'; // Example message
+            window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+        }
+    
+        function activateShakeAlert() {
+            alert('Shake alert activated! This would normally trigger a specific action.');
+        }
+    
+        function emergencyCamera() {
+            const constraints = { video: true };
+            const cameraModal = document.getElementById('cameraModal');
+            const cameraStream = document.getElementById('cameraStream');
+    
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(stream => {
+                    cameraStream.srcObject = stream;
+                    cameraModal.classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('Error accessing camera: ', error);
+                    alert('Error accessing camera.');
+                });
+        }
+    
+        function closeCamera() {
+            const cameraModal = document.getElementById('cameraModal');
+            const cameraStream = document.getElementById('cameraStream');
+            const stream = cameraStream.srcObject;
+    
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+            }
+    
+            cameraModal.classList.add('hidden');
+        }
+    
+        function takePicture() {
+            const cameraStream = document.getElementById('cameraStream');
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraStream.videoWidth;
+            canvas.height = cameraStream.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
+    
+            const image = canvas.toDataURL('image/png');
+            console.log(image); // Do something with the image, e.g., upload or display
+        }
+    
+        function findNearbyPoliceStations() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+    
+        function showPosition(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const mapModal = document.getElementById('mapModal');
+            mapModal.classList.remove('hidden');
+            initMap(lat, lng);
+        }
+    
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert('User denied the request for Geolocation.');
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert('Location information is unavailable.');
+                    break;
+                case error.TIMEOUT:
+                    alert('The request to get user location timed out.');
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert('An unknown error occurred.');
+                    break;
+            }
+        }
+    
+        function initMap(lat, lng) {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat, lng },
+                zoom: 15
+            });
+    
+            const service = new google.maps.places.PlacesService(map);
+            const request = {
+                location: { lat, lng },
+                radius: '5000',
+                type: ['police']
+            };
+    
+            service.nearbySearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    for (let i = 0; i < results.length; i++) {
+                        createMarker(results[i]);
+                    }
+                } else {
+                    alert('No police stations found nearby.');
+                }
+            });
+    
+            function createMarker(place) {
+                new google.maps.Marker({
+                    map,
+                    position: place.geometry.location,
+                    title: place.name
+                });
+            }
+        }
+    
+        function closeMap() {
+            const mapModal = document.getElementById('mapModal');
+            mapModal.classList.add('hidden');
+        }
+    
+        function playPoliceSiren() {
+            const audio = new Audio('police-siren-sound.mp3'); // Ensure you have this file
+            audio.play();
+        }
+    
+        function callQuickTaxi() {
+            alert('Calling a quick taxi! This would normally integrate with a taxi service API.');
+        }
+    
+        function showSafetyNews() {
+            window.location.href = '/safety-news'; // Example link to a safety news page
+        }
+    </script>
+    
+    <!-- Load the Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 </body>
 </html>
